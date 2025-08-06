@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: SingletonScheduler
+  data:
+    redis:
+      host: 118.196.23.170
+      port: 6379

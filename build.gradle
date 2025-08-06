@@ -1,0 +1,64 @@
+plugins {
+    id 'java'
+    id 'java-library'
+    id 'maven-publish'
+    id 'org.springframework.boot' version '3.5.4'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+    withSourcesJar()
+    withJavadocJar()
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.apache.camel.springboot:camel-spring-boot-bom:4.10.3"
+    }
+}
+
+dependencies {
+    // Spring Boot
+    annotationProcessor 'org.springframework.boot:spring-boot-autoconfigure-processor'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    implementation 'org.springframework.boot:spring-boot-starter'
+
+    implementation 'org.apache.camel.springboot:camel-spring-boot-starter'
+    implementation 'org.apache.camel.springboot:camel-master-starter'
+    implementation 'org.apache.camel.springboot:camel-jpa-starter'
+    implementation 'org.apache.camel.springboot:camel-timer-starter'
+
+    // Redis
+    implementation 'org.redisson:redisson-spring-boot-starter:3.23.2'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'io.projectreactor:reactor-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifactId = 'spring-boot-starter-singleton-scheduler'
+        }
+    }
+    repositories {
+        mavenLocal()
+    }
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
